@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<mbf version="4.0" xmlns="http://www.mbfbioscience.com" xmlns:nl="http://www.mbfbioscience.com" appname="Tissue Mapper" appversion="2020.1.1 (64-bit)">
+<description><![CDATA[]]></description>
+	
+<marker type="FilledCircle" color="#FFFF00" name="LOCATION-S1" varicosity="false">
+  <point x="10708.52" y="-12888.26" z="-21200" d="29.26" sid="S531"/>
+ </marker>
+<marker type="FilledCircle" color="#FFFF00" name="LOCATION-S2" varicosity="false">
+  <point x="11785.4" y="-11418.49" z="-21200" d="13.62" sid="S531"/>
+ </marker>
+<marker type="FilledCircle" color="#FFFF00" name="LOCATION-S3" varicosity="false">
+  <point x="11635.63" y="-11513.79" z="-21200" d="13.62" sid="S531"/>
+ </marker>
+<marker type="FilledCircle" color="#FFFF00" name="LOCATION-S4" varicosity="false">
+  <point x="12261.94" y="-8266.48" z="-21200" d="13.62" sid="S531"/>
+ </marker>
+
+ </mbf>	
