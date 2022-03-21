@@ -11,7 +11,7 @@ from opencmiss.importer.errors import OpenCMISSImportInvalidInputs, OpenCMISSImp
 
 
 def import_data(inputs, output_directory):
-    if type(inputs) == list and len(inputs):
+    if type(inputs) == list and len(inputs) == 1:
         inputs = inputs[0]
 
     if not valid(inputs, parameters("input")):
