@@ -6,15 +6,15 @@ import mbfxml2ex.exceptions
 from mbfxml2ex.app import read_xml
 from mbfxml2ex.zinc import load
 
+from opencmiss.utils.zinc.field import create_field_finite_element
 from opencmiss.zinc.context import Context
 from opencmiss.zinc.field import Field
 
 from opencmiss.importer import ragpdata
 from opencmiss.importer.errors import OpenCMISSImportInvalidInputs
 from opencmiss.importer.ragpdata import import_data
-from opencmiss.utils.zinc.field import create_field_finite_element
 
-here = os.path.abspath(os.path.dirname(__file__))
+from tests.shared import resource_path
 
 
 class RAGPData(unittest.TestCase):
@@ -23,19 +23,19 @@ class RAGPData(unittest.TestCase):
         parameters = ragpdata.parameters()
 
         keys = set(parameters.keys())
-        exp_keys = {"version", "id", "inputs", "outputs"}
+        exp_keys = {"version", "id", "inputs", "output"}
 
         self.assertEqual(exp_keys, keys)
         self.assertEqual("ragpdata", parameters["id"])
         self.assertEqual(2, len(parameters["inputs"]))
-        self.assertEqual(1, len(parameters["outputs"]))
+        self.assertIn("mimetype", parameters["output"])
 
     def test_read_bad_markers(self):
-        image_file = _resource_path("white_image.jpeg")
+        image_file = resource_path("white_image.jpeg")
         self.assertRaises(mbfxml2ex.exceptions.MBFXMLFormat, read_xml, image_file)
 
     def test_read_bad_csv(self):
-        image_file = _resource_path("white_image.jpeg")
+        image_file = resource_path("white_image.jpeg")
         with open(image_file) as f:
             csv_reader = csv.DictReader(f)
 
@@ -46,22 +46,22 @@ class RAGPData(unittest.TestCase):
                 self.assertEqual("'utf-8' codec can't decode byte 0xff in position 0: invalid start byte", str(e))
 
     def test_read_no_markers(self):
-        nonexistent_file = _resource_path("nonexistent.file")
+        nonexistent_file = resource_path("nonexistent.file")
         self.assertRaises(mbfxml2ex.exceptions.MBFXMLFile, read_xml, nonexistent_file)
 
     def test_read_no_csv(self):
-        nonexistent_file = _resource_path("nonexistent.file")
+        nonexistent_file = resource_path("nonexistent.file")
         self.assertRaises(FileNotFoundError, open, nonexistent_file)
 
     def test_read_markers(self):
-        xml_file = _resource_path("gene_locations.xml")
+        xml_file = resource_path("gene_locations.xml")
         contents = read_xml(xml_file)
 
         self.assertEqual(4, len(contents))
 
     def test_read_gene_values(self):
         EXPECTED_GENES = ["Ache", "Actb", "Adra1a"]
-        csv_file = _resource_path("gene_v_location.csv")
+        csv_file = resource_path("gene_v_location.csv")
         with open(csv_file) as f:
             csv_reader = csv.DictReader(f)
 
@@ -72,14 +72,14 @@ class RAGPData(unittest.TestCase):
                 self.assertEqual(4, len(row))
 
     def test_content_in_context(self):
-        xml_file = _resource_path("gene_locations.xml")
+        xml_file = resource_path("gene_locations.xml")
         contents = read_xml(xml_file)
         context = Context("Gene")
         region = context.getDefaultRegion()
         field_module = region.getFieldmodule()
         load(region, contents, None)
 
-        csv_file = _resource_path("gene_v_location.csv")
+        csv_file = resource_path("gene_v_location.csv")
         with open(csv_file) as f:
             csv_reader = csv.DictReader(f)
 
@@ -109,7 +109,7 @@ class RAGPData(unittest.TestCase):
 
                     data_point = point_iter.next()
 
-        output_exf = _resource_path("gene_data.exf")
+        output_exf = resource_path("gene_data.exf")
         region.writeFile(output_exf)
         self.assertTrue(os.path.isfile(output_exf))
         with open(output_exf) as f:
@@ -119,23 +119,23 @@ class RAGPData(unittest.TestCase):
         os.remove(output_exf)
 
     def test_import_data_nonexistent_xml(self):
-        xml_file = _resource_path("nonexistent.xml")
-        csv_file = _resource_path("gene_v_location.csv")
-        output_dir = _resource_path("")
+        xml_file = resource_path("nonexistent.xml")
+        csv_file = resource_path("gene_v_location.csv")
+        output_dir = resource_path("")
 
         self.assertRaises(OpenCMISSImportInvalidInputs, import_data, [xml_file, csv_file], output_dir)
 
     def test_import_data_nonexistent_csv(self):
-        xml_file = _resource_path("gene_locations.xml")
-        csv_file = _resource_path("nonexistent.csv")
-        output_dir = _resource_path("")
+        xml_file = resource_path("gene_locations.xml")
+        csv_file = resource_path("nonexistent.csv")
+        output_dir = resource_path("")
 
         self.assertRaises(OpenCMISSImportInvalidInputs, import_data, [xml_file, csv_file], output_dir)
 
     def test_import_data(self):
-        xml_file = _resource_path("gene_locations.xml")
-        csv_file = _resource_path("gene_v_location.csv")
-        output_dir = _resource_path("")
+        xml_file = resource_path("gene_locations.xml")
+        csv_file = resource_path("gene_v_location.csv")
+        output_dir = resource_path("")
 
         output_exf = import_data([xml_file, csv_file], output_dir)
 
@@ -146,10 +146,6 @@ class RAGPData(unittest.TestCase):
 
         self.assertEqual(97, len(lines))
         os.remove(output_exf)
-
-
-def _resource_path(resource_name):
-    return os.path.join(here, "resources", resource_name)
 
 
 if __name__ == '__main__':

@@ -16,7 +16,7 @@ from opencmiss.importer.errors import OpenCMISSImportMBFXMLError, OpenCMISSImpor
 
 def import_data(inputs, output_directory):
     if not valid(inputs, parameters("inputs")):
-        raise OpenCMISSImportInvalidInputs(f"Invalid imports given to importer: {identifier()}")
+        raise OpenCMISSImportInvalidInputs(f"Invalid inputs given to importer: {identifier()}")
 
     marker_file = inputs[0]
     gene_data_file = inputs[1]
@@ -64,7 +64,8 @@ def import_data(inputs, output_directory):
         except UnicodeDecodeError:
             raise OpenCMISSImportGeneFileError("Gene CSV file not valid.")
 
-    output_exf = os.path.join(output_directory, identifier() + ".exf")
+    filename_parts = os.path.splitext(os.path.basename(marker_file))
+    output_exf = os.path.join(output_directory, filename_parts[0] + ".exf")
     result = region.writeFile(output_exf)
     if result == ZINC_OK:
         output = output_exf

@@ -19,5 +19,9 @@ class OpenCMISSImportGeneFileError(OpenCMISSImportError):
     pass
 
 
+class OpenCMISSImportColonHRMError(OpenCMISSImportError):
+    pass
+
+
 class OpenCMISSImportUnknownParameter(OpenCMISSImportError):
     pass
