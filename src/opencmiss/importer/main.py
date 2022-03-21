@@ -3,6 +3,7 @@ import os.path
 import sys
 
 from opencmiss.importer import ragpdata
+from opencmiss.importer import colonhrm
 
 
 def available_importers():
@@ -15,6 +16,8 @@ def import_data(importer, inputs, working_directory):
     outputs = None
     if importer == ragpdata.identifier():
         outputs = ragpdata.import_data(inputs, working_directory)
+    elif importer == colonhrm.identifier():
+        outputs = colonhrm.import_data(inputs, working_directory)
 
     return outputs
 
