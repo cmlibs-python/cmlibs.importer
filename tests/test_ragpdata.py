@@ -10,6 +10,7 @@ from opencmiss.zinc.context import Context
 from opencmiss.zinc.field import Field
 
 from opencmiss.importer import ragpdata
+from opencmiss.importer.errors import OpenCMISSImportInvalidInputs
 from opencmiss.importer.ragpdata import import_data
 from opencmiss.utils.zinc.field import create_field_finite_element
 
@@ -117,12 +118,26 @@ class RAGPData(unittest.TestCase):
         self.assertEqual(97, len(lines))
         os.remove(output_exf)
 
+    def test_import_data_nonexistent_xml(self):
+        xml_file = _resource_path("nonexistent.xml")
+        csv_file = _resource_path("gene_v_location.csv")
+        output_dir = _resource_path("")
+
+        self.assertRaises(OpenCMISSImportInvalidInputs, import_data, [xml_file, csv_file], output_dir)
+
+    def test_import_data_nonexistent_csv(self):
+        xml_file = _resource_path("gene_locations.xml")
+        csv_file = _resource_path("nonexistent.csv")
+        output_dir = _resource_path("")
+
+        self.assertRaises(OpenCMISSImportInvalidInputs, import_data, [xml_file, csv_file], output_dir)
+
     def test_import_data(self):
         xml_file = _resource_path("gene_locations.xml")
         csv_file = _resource_path("gene_v_location.csv")
-        output_exf = _resource_path("merged_data.exf")
+        output_dir = _resource_path("")
 
-        import_data(xml_file, csv_file, output_exf)
+        output_exf = import_data([xml_file, csv_file], output_dir)
 
         self.assertTrue(os.path.isfile(output_exf))
 

@@ -3,6 +3,10 @@ class OpenCMISSImportError(Exception):
     pass
 
 
+class OpenCMISSImportInvalidInputs(OpenCMISSImportError):
+    pass
+
+
 class OpenCMISSImportMBFXMLError(OpenCMISSImportError):
     pass
 
@@ -12,4 +16,8 @@ class OpenCMISSImportFileNotFoundError(OpenCMISSImportError):
 
 
 class OpenCMISSImportGeneFileError(OpenCMISSImportError):
+    pass
+
+
+class OpenCMISSImportUnknownParameter(OpenCMISSImportError):
     pass

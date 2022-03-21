@@ -11,6 +11,14 @@ def available_importers():
     ]
 
 
+def import_data(importer, inputs, working_directory):
+    outputs = None
+    if importer == ragpdata.identifier():
+        outputs = ragpdata.import_data(inputs, working_directory)
+
+    return outputs
+
+
 def main():
     parser = argparse.ArgumentParser(description='Import data into OpenCMISS-Zinc.')
     parser.add_argument("-o", "--output", help='output directory.')
