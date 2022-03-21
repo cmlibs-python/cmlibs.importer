@@ -81,6 +81,11 @@ def parameters(parameter_name=None):
     importer_parameters = {
         "version": "0.1.0",
         "id": identifier(),
+        "title": "RAGP Neuron Gene Sampling",
+        "description":
+            "Right Atrial Ganglionated Plexus (RAGP) neuron gene sampling importer is for gene data spread across two files."
+            " The first file is an MBF XML file containing the marker coordinates and marker name."
+            " The second file is a comma separated value file containing the gene name, marker name, value matrix.",
         "inputs": [
             {
                 "mimetype": "application/vnd.mbfbioscience.metadata+xml",

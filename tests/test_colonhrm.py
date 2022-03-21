@@ -13,7 +13,7 @@ class ColonHRM(unittest.TestCase):
     def test_parameters(self):
         parameters = colonhrm.parameters()
         keys = set(parameters.keys())
-        exp_keys = {"version", "id", "input", "output"}
+        exp_keys = {"version", "id", "input", "output", "title", "description"}
 
         self.assertEqual(exp_keys, keys)
         self.assertEqual("colonhrm", parameters["id"])

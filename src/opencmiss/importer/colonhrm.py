@@ -99,6 +99,11 @@ def parameters(parameter_name=None):
     importer_parameters = {
         "version": "0.1.0",
         "id": identifier(),
+        "title": "Colon High Resolution Manometry",
+        "description":
+            "Colon high resolution manometry importer is for data listed in a tab separated values file."
+            " The first column is time, the second column indicates if the stimulation has been applied, and"
+            " any remaining columns are the values recorded from the sensors.",
         "input": {
             "mimetype": "text/tab-separated-values",
         },

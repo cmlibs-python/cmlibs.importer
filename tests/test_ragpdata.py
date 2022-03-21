@@ -23,7 +23,7 @@ class RAGPData(unittest.TestCase):
         parameters = ragpdata.parameters()
 
         keys = set(parameters.keys())
-        exp_keys = {"version", "id", "inputs", "output"}
+        exp_keys = {"version", "id", "inputs", "output", "title", "description"}
 
         self.assertEqual(exp_keys, keys)
         self.assertEqual("ragpdata", parameters["id"])
