@@ -43,7 +43,7 @@ def import_data(inputs, output_directory):
             stimulation = float(row.pop(0))
             values = row[:]
             if first_row:
-                _setup_nodes(field_module, times, values)
+                _setup_nodes(field_module, times, len(values))
                 first_row = False
 
             pressure_field = field_module.findFieldByName("pressure")
@@ -67,8 +67,7 @@ def import_data(inputs, output_directory):
     return output
 
 
-def _setup_nodes(field_module, times, values):
-    num_sensors = len(values)
+def _setup_nodes(field_module, times, num_sensors):
     coordinate_field = create_field_coordinates(field_module)
     pressure_field = create_field_finite_element(field_module, "pressure", 1, type_coordinate=False)
     stimulation_field = create_field_finite_element(field_module, "stimulation", 1, type_coordinate=False)
@@ -85,7 +84,7 @@ def _setup_nodes(field_module, times, values):
     data_template.setTimesequence(stimulation_field, time_sequence)
 
     field_cache = field_module.createFieldcache()
-    for index, value in enumerate(values):
+    for index in range(num_sensors):
         pos = [index / (num_sensors - 1), 0.0, 0.0]
         node = data_points.createNode(-1, data_template)
         field_cache.setNode(node)
