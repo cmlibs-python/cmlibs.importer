@@ -34,6 +34,8 @@ def import_data(inputs, output_directory):
                 times.append(float(row[0]))
         except UnicodeDecodeError:
             raise OpenCMISSImportColonHRMError("Colon HRM file is not valid.")
+        except ValueError:
+            raise OpenCMISSImportColonHRMError("Colon HRM file is not valid.")
 
     with open(manometry_data) as f:
         csv_reader = csv.reader(f, delimiter='\t')

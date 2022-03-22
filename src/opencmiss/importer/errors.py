@@ -23,5 +23,9 @@ class OpenCMISSImportColonHRMError(OpenCMISSImportError):
     pass
 
 
+class OpenCMISSImportColonManometryError(OpenCMISSImportError):
+    pass
+
+
 class OpenCMISSImportUnknownParameter(OpenCMISSImportError):
     pass
