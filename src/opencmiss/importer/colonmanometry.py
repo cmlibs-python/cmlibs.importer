@@ -1,7 +1,7 @@
 import csv
 import os.path
 
-from opencmiss.utils.zinc.field import create_field_finite_element, create_field_coordinates
+from opencmiss.utils.zinc.field import create_field_finite_element, create_field_coordinates, find_or_create_field_stored_string, find_or_create_field_group
 from opencmiss.zinc.context import Context
 from opencmiss.zinc.field import Field
 from opencmiss.zinc.status import OK as ZINC_OK
@@ -61,10 +61,17 @@ def import_data(inputs, output_directory):
 
 def _create_node(field_module, name, times, values):
     pressure_field = create_field_finite_element(field_module, "pressure", 1, type_coordinate=False)
+    name_field = find_or_create_field_stored_string(field_module, "marker_name")
     data_points = field_module.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_DATAPOINTS)
+
+    group_field = find_or_create_field_group(field_module, "marker")
+    node_group_field = group_field.getFieldNodeGroup(data_points)
+    if not node_group_field.isValid():
+        node_group_field = group_field.createFieldNodeGroup(data_points)
 
     data_template = data_points.createNodetemplate()
     data_template.defineField(pressure_field)
+    data_template.defineField(name_field)
 
     time_sequence = field_module.getMatchingTimesequence(times)
 
@@ -72,7 +79,11 @@ def _create_node(field_module, name, times, values):
 
     field_cache = field_module.createFieldcache()
     node = data_points.createNode(-1, data_template)
+
+    nodeset_group = node_group_field.getNodesetGroup()
+    nodeset_group.addNode(node)
     field_cache.setNode(node)
+    name_field.assignString(field_cache, name)
     for index, value in enumerate(values):
         current_time = float(times[index])
         field_cache.setTime(current_time)
