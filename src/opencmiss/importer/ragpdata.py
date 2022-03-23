@@ -14,21 +14,18 @@ from opencmiss.importer.base import valid
 from opencmiss.importer.errors import OpenCMISSImportMBFXMLError, OpenCMISSImportGeneFileError, OpenCMISSImportInvalidInputs, OpenCMISSImportUnknownParameter
 
 
-def import_data(inputs, output_directory):
+def import_data_into_region(region, inputs):
     if not valid(inputs, parameters("inputs")):
         raise OpenCMISSImportInvalidInputs(f"Invalid inputs given to importer: {identifier()}")
 
     marker_file = inputs[0]
     gene_data_file = inputs[1]
-    output = None
 
     try:
         contents = read_xml(marker_file)
     except MBFXMLFormat:
         raise OpenCMISSImportMBFXMLError("Marker file is not a valid MBF XML file.")
 
-    context = Context("Gene")
-    region = context.getDefaultRegion()
     field_module = region.getFieldmodule()
     load(region, contents, None)
 
@@ -64,7 +61,15 @@ def import_data(inputs, output_directory):
         except UnicodeDecodeError:
             raise OpenCMISSImportGeneFileError("Gene CSV file not valid.")
 
-    filename_parts = os.path.splitext(os.path.basename(marker_file))
+
+def import_data(inputs, output_directory):
+    output = None
+    context = Context("Gene")
+    region = context.getDefaultRegion()
+
+    import_data_into_region(region, inputs)
+    # Inputs has already been validated by this point so it is safe to use.
+    filename_parts = os.path.splitext(os.path.basename(inputs[0]))
     output_exf = os.path.join(output_directory, filename_parts[0] + ".exf")
     result = region.writeFile(output_exf)
     if result == ZINC_OK:
