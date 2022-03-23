@@ -30,7 +30,7 @@ class ColonHRM(unittest.TestCase):
         with open(output_exf) as f:
             lines = f.readlines()
 
-        self.assertEqual(548, len(lines))
+        self.assertEqual(566, len(lines))
         os.remove(output_exf)
 
     def test_import_data_no_hrm_file(self):

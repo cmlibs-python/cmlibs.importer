@@ -1,7 +1,7 @@
 import csv
 import os.path
 
-from opencmiss.utils.zinc.field import create_field_finite_element, create_field_coordinates
+from opencmiss.utils.zinc.field import create_field_finite_element, create_field_coordinates, find_or_create_field_group, find_or_create_field_stored_string
 from opencmiss.zinc.context import Context
 from opencmiss.zinc.field import Field
 from opencmiss.zinc.status import OK as ZINC_OK
@@ -71,14 +71,23 @@ def import_data(inputs, output_directory):
 
 def _setup_nodes(field_module, times, num_sensors):
     coordinate_field = create_field_coordinates(field_module)
+    name_field = find_or_create_field_stored_string(field_module, "marker_name")
     pressure_field = create_field_finite_element(field_module, "pressure", 1, type_coordinate=False)
     stimulation_field = create_field_finite_element(field_module, "stimulation", 1, type_coordinate=False)
     data_points = field_module.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_DATAPOINTS)
 
+    group_field = find_or_create_field_group(field_module, "marker")
+    node_group_field = group_field.getFieldNodeGroup(data_points)
+    if not node_group_field.isValid():
+        node_group_field = group_field.createFieldNodeGroup(data_points)
+
     data_template = data_points.createNodetemplate()
     data_template.defineField(coordinate_field)
+    data_template.defineField(name_field)
     data_template.defineField(pressure_field)
     data_template.defineField(stimulation_field)
+
+    nodeset_group = node_group_field.getNodesetGroup()
 
     time_sequence = field_module.getMatchingTimesequence(times)
 
@@ -89,8 +98,10 @@ def _setup_nodes(field_module, times, num_sensors):
     for index in range(num_sensors):
         pos = [index / (num_sensors - 1), 0.0, 0.0]
         node = data_points.createNode(-1, data_template)
+        nodeset_group.addNode(node)
         field_cache.setNode(node)
         coordinate_field.assignReal(field_cache, pos)
+        name_field.assignString(field_cache, f"Sensor {index + 1}")
 
 
 def identifier():
