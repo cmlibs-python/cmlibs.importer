@@ -10,7 +10,7 @@ from opencmiss.importer.base import valid
 from opencmiss.importer.errors import OpenCMISSImportInvalidInputs, OpenCMISSImportUnknownParameter, OpenCMISSImportColonHRMError
 
 
-def import_data(inputs, output_directory):
+def import_data_into_region(region, inputs):
     if type(inputs) == list and len(inputs) == 1:
         inputs = inputs[0]
 
@@ -18,10 +18,6 @@ def import_data(inputs, output_directory):
         raise OpenCMISSImportInvalidInputs(f"Invalid input given to importer: {identifier()}")
 
     manometry_data = inputs
-    output = None
-
-    context = Context("HRM")
-    region = context.getDefaultRegion()
     field_module = region.getFieldmodule()
 
     # Determine times for time keeper.
@@ -60,7 +56,16 @@ def import_data(inputs, output_directory):
                 pressure_field.assignReal(field_cache, float(value))
                 stimulation_field.assignReal(field_cache, stimulation)
 
-    filename_parts = os.path.splitext(os.path.basename(manometry_data))
+
+def import_data(inputs, output_directory):
+    output = None
+    context = Context("HRM")
+    region = context.getDefaultRegion()
+
+    import_data_into_region(region, inputs)
+
+    # Inputs has already been validated by this point so it is safe to use.
+    filename_parts = os.path.splitext(os.path.basename(inputs))
     output_exf = os.path.join(output_directory, filename_parts[0] + ".exf")
     result = region.writeFile(output_exf)
     if result == ZINC_OK:

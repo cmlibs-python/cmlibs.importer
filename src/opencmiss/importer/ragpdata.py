@@ -68,6 +68,7 @@ def import_data(inputs, output_directory):
     region = context.getDefaultRegion()
 
     import_data_into_region(region, inputs)
+
     # Inputs has already been validated by this point so it is safe to use.
     filename_parts = os.path.splitext(os.path.basename(inputs[0]))
     output_exf = os.path.join(output_directory, filename_parts[0] + ".exf")
