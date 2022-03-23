@@ -16,7 +16,7 @@ class ColonHRM(unittest.TestCase):
         exp_keys = {"version", "id", "input", "output", "title", "description"}
 
         self.assertEqual(exp_keys, keys)
-        self.assertEqual("colonhrm", parameters["id"])
+        self.assertEqual("ColonHRM", parameters["id"])
         self.assertIn("mimetype", parameters["input"])
         self.assertIn("mimetype", parameters["output"])
 

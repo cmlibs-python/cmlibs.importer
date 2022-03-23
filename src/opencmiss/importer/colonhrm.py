@@ -110,7 +110,7 @@ def _setup_nodes(field_module, times, num_sensors):
 
 
 def identifier():
-    return "colonhrm"
+    return "ColonHRM"
 
 
 def parameters(parameter_name=None):

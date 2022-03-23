@@ -80,7 +80,7 @@ def import_data(inputs, output_directory):
 
 
 def identifier():
-    return "ragpdata"
+    return "RAGPData"
 
 
 def parameters(parameter_name=None):

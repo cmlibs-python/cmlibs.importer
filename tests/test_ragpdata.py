@@ -26,7 +26,7 @@ class RAGPData(unittest.TestCase):
         exp_keys = {"version", "id", "inputs", "output", "title", "description"}
 
         self.assertEqual(exp_keys, keys)
-        self.assertEqual("ragpdata", parameters["id"])
+        self.assertEqual("RAGPData", parameters["id"])
         self.assertEqual(2, len(parameters["inputs"]))
         self.assertIn("mimetype", parameters["output"])
 
