@@ -8,6 +8,7 @@ from opencmiss.zinc.status import OK as ZINC_OK
 
 from opencmiss.importer.base import valid
 from opencmiss.importer.errors import OpenCMISSImportInvalidInputs, OpenCMISSImportUnknownParameter, OpenCMISSImportColonManometryError
+from opencmiss.utils.zinc.general import ChangeManager
 
 
 def import_data_into_region(region, inputs):
@@ -20,25 +21,26 @@ def import_data_into_region(region, inputs):
     manometry_data = inputs
     field_module = region.getFieldmodule()
 
-    with open(manometry_data) as f:
-        csv_reader = csv.reader(f)
-        first_row = True
-        try:
-            for row in csv_reader:
-                heading = row.pop(0)
-                if first_row and heading != 'Time':
-                    raise OpenCMISSImportColonManometryError("Colon manometry file is not valid.")
+    with ChangeManager(field_module):
+        with open(manometry_data) as f:
+            csv_reader = csv.reader(f)
+            first_row = True
+            try:
+                for row in csv_reader:
+                    heading = row.pop(0)
+                    if first_row and heading != 'Time':
+                        raise OpenCMISSImportColonManometryError("Colon manometry file is not valid.")
 
-                if heading == 'Time':
-                    first_row = False
-                    times = [float(t) for t in row]
-                else:
-                    values = row[:]
-                    _create_node(field_module, heading, times, values)
-        except UnicodeDecodeError:
-            raise OpenCMISSImportColonManometryError("Colon manometry file is not valid.")
-        except ValueError:
-            raise OpenCMISSImportColonManometryError("Colon manometry file is not valid.")
+                    if heading == 'Time':
+                        first_row = False
+                        times = [float(t) for t in row]
+                    else:
+                        values = row[:]
+                        _create_node(field_module, heading, times, values)
+            except UnicodeDecodeError:
+                raise OpenCMISSImportColonManometryError("Colon manometry file is not valid.")
+            except ValueError:
+                raise OpenCMISSImportColonManometryError("Colon manometry file is not valid.")
 
 
 def import_data(inputs, output_directory):

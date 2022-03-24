@@ -12,6 +12,7 @@ from opencmiss.zinc.status import OK as ZINC_OK
 
 from opencmiss.importer.base import valid
 from opencmiss.importer.errors import OpenCMISSImportMBFXMLError, OpenCMISSImportGeneFileError, OpenCMISSImportInvalidInputs, OpenCMISSImportUnknownParameter
+from opencmiss.utils.zinc.general import ChangeManager
 
 
 def import_data_into_region(region, inputs):
@@ -27,39 +28,41 @@ def import_data_into_region(region, inputs):
         raise OpenCMISSImportMBFXMLError("Marker file is not a valid MBF XML file.")
 
     field_module = region.getFieldmodule()
-    load(region, contents, None)
 
-    with open(gene_data_file) as f:
-        csv_reader = csv.DictReader(f)
+    with ChangeManager(field_module):
+        load(region, contents, None)
 
-        try:
-            for row in csv_reader:
-                gene = row[""]
-                del row[""]
+        with open(gene_data_file) as f:
+            csv_reader = csv.DictReader(f)
 
-                gene_field = create_field_finite_element(field_module, gene, 1, type_coordinate=False)
-                data_points = field_module.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_DATAPOINTS)
-                data_template = data_points.createNodetemplate()
-                data_template.defineField(gene_field)
+            try:
+                for row in csv_reader:
+                    gene = row[""]
+                    del row[""]
 
-                point_iter = data_points.createNodeiterator()
-                data_point = point_iter.next()
-                while data_point.isValid():
-                    field_cache = field_module.createFieldcache()
-                    field_cache.setNode(data_point)
-                    marker = field_module.findFieldByName("marker_name")
-                    cell_name = marker.evaluateString(field_cache)
+                    gene_field = create_field_finite_element(field_module, gene, 1, type_coordinate=False)
+                    data_points = field_module.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_DATAPOINTS)
+                    data_template = data_points.createNodetemplate()
+                    data_template.defineField(gene_field)
 
-                    try:
-                        gene_expression_value = float(row[cell_name])
-                        data_point.merge(data_template)
-                        gene_field.assignReal(field_cache, gene_expression_value)
-                    except ValueError:
-                        pass
-
+                    point_iter = data_points.createNodeiterator()
                     data_point = point_iter.next()
-        except UnicodeDecodeError:
-            raise OpenCMISSImportGeneFileError("Gene CSV file not valid.")
+                    while data_point.isValid():
+                        field_cache = field_module.createFieldcache()
+                        field_cache.setNode(data_point)
+                        marker = field_module.findFieldByName("marker_name")
+                        cell_name = marker.evaluateString(field_cache)
+
+                        try:
+                            gene_expression_value = float(row[cell_name])
+                            data_point.merge(data_template)
+                            gene_field.assignReal(field_cache, gene_expression_value)
+                        except ValueError:
+                            pass
+
+                        data_point = point_iter.next()
+            except UnicodeDecodeError:
+                raise OpenCMISSImportGeneFileError("Gene CSV file not valid.")
 
 
 def import_data(inputs, output_directory):

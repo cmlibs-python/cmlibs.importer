@@ -8,6 +8,7 @@ from opencmiss.zinc.status import OK as ZINC_OK
 
 from opencmiss.importer.base import valid
 from opencmiss.importer.errors import OpenCMISSImportInvalidInputs, OpenCMISSImportUnknownParameter, OpenCMISSImportColonHRMError
+from opencmiss.utils.zinc.general import ChangeManager
 
 
 def import_data_into_region(region, inputs):
@@ -33,28 +34,29 @@ def import_data_into_region(region, inputs):
         except ValueError:
             raise OpenCMISSImportColonHRMError("Colon HRM file is not valid.")
 
-    with open(manometry_data) as f:
-        csv_reader = csv.reader(f, delimiter='\t')
-        first_row = True
-        for row in csv_reader:
-            time = float(row.pop(0))
-            stimulation = float(row.pop(0))
-            values = row[:]
-            if first_row:
-                _setup_nodes(field_module, times, len(values))
-                first_row = False
+    with ChangeManager(field_module):
+        with open(manometry_data) as f:
+            csv_reader = csv.reader(f, delimiter='\t')
+            first_row = True
+            for row in csv_reader:
+                time = float(row.pop(0))
+                stimulation = float(row.pop(0))
+                values = row[:]
+                if first_row:
+                    _setup_nodes(field_module, times, len(values))
+                    first_row = False
 
-            pressure_field = field_module.findFieldByName("pressure")
-            stimulation_field = field_module.findFieldByName("stimulation")
+                pressure_field = field_module.findFieldByName("pressure")
+                stimulation_field = field_module.findFieldByName("stimulation")
 
-            data_points = field_module.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_DATAPOINTS)
-            for index, value in enumerate(values):
-                data_point = data_points.findNodeByIdentifier(index + 1)
-                field_cache = field_module.createFieldcache()
-                field_cache.setNode(data_point)
-                field_cache.setTime(time)
-                pressure_field.assignReal(field_cache, float(value))
-                stimulation_field.assignReal(field_cache, stimulation)
+                data_points = field_module.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_DATAPOINTS)
+                for index, value in enumerate(values):
+                    data_point = data_points.findNodeByIdentifier(index + 1)
+                    field_cache = field_module.createFieldcache()
+                    field_cache.setNode(data_point)
+                    field_cache.setTime(time)
+                    pressure_field.assignReal(field_cache, float(value))
+                    stimulation_field.assignReal(field_cache, stimulation)
 
 
 def import_data(inputs, output_directory):
