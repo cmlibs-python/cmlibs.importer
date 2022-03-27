@@ -30,7 +30,20 @@ class ColonManometry(unittest.TestCase):
         with open(output_exf) as f:
             lines = f.readlines()
 
-        self.assertEqual(1043, len(lines))
+        self.assertEqual(955, len(lines))
+        os.remove(output_exf)
+
+    def test_import_data_small(self):
+        hrm_file = resource_path("colon_manometry_small.csv")
+        output_dir = resource_path("")
+
+        output_exf = import_data(hrm_file, output_dir)
+        self.assertTrue(os.path.isfile(output_exf))
+
+        with open(output_exf) as f:
+            lines = f.readlines()
+
+        self.assertEqual(47, len(lines))
         os.remove(output_exf)
 
     def test_import_data_no_manometry_file(self):

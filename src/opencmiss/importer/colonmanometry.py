@@ -1,7 +1,7 @@
 import csv
 import os.path
 
-from opencmiss.utils.zinc.field import create_field_finite_element, create_field_coordinates, find_or_create_field_stored_string, find_or_create_field_group
+from opencmiss.utils.zinc.field import create_field_finite_element, find_or_create_field_stored_string, find_or_create_field_group
 from opencmiss.zinc.context import Context
 from opencmiss.zinc.field import Field
 from opencmiss.zinc.status import OK as ZINC_OK
@@ -62,7 +62,9 @@ def import_data(inputs, output_directory):
 
 
 def _create_node(field_module, name, times, values):
-    pressure_field = create_field_finite_element(field_module, "pressure", 1, type_coordinate=False)
+    pressure_field = field_module.findFieldByName("pressure")
+    if not pressure_field.isValid():
+        pressure_field = create_field_finite_element(field_module, "pressure", 1, type_coordinate=False)
     name_field = find_or_create_field_stored_string(field_module, "marker_name")
     data_points = field_module.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_DATAPOINTS)
 
