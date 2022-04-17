@@ -31,7 +31,20 @@ readme.append('')
 
 software_licence = readfile("LICENSE")
 
-requires = ["opencmiss.zinc", "mbfxml2ex"]
+requires = ["opencmiss.zinc"]
+requirements_mbfxml = [
+    "mbfxml2ex",
+]
+requirements_common = [
+    "trimesh",
+    "Shapely",
+]
+requirements_svg = [
+    "trimesh",
+    "svg.path",
+    "lxml",
+]
+requirements_all = list(set(requirements_svg + requirements_common + requirements_mbfxml))
 
 setup(
     name='opencmiss.importer',
@@ -54,5 +67,11 @@ setup(
         "console_scripts": [
             "importer_app = opencmiss.importer.main:main"
         ]
+    },
+    extras_require={
+        "mbfxml": requirements_mbfxml,
+        "svg": requirements_svg,
+        "common": requirements_common,
+        "all": requirements_all,
     },
 )

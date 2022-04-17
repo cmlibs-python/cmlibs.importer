@@ -4,9 +4,7 @@ from mbfxml2ex.app import read_xml
 from mbfxml2ex.exceptions import MBFXMLFormat
 from mbfxml2ex.zinc import load
 
-from opencmiss.utils.zinc.field import create_field_finite_element, find_or_create_field_stored_string, find_or_create_field_group
 from opencmiss.zinc.context import Context
-from opencmiss.zinc.field import Field
 from opencmiss.zinc.status import OK as ZINC_OK
 
 from opencmiss.importer.base import valid
