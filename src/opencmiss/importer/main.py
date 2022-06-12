@@ -1,36 +1,46 @@
 import argparse
+import importlib
 import os.path
+import pkgutil
 import sys
 
 from opencmiss.importer import ragpdata
 from opencmiss.importer import colonhrm
+import opencmiss.importer as imp
+from opencmiss.importer.errors import OpenCMISSImportError
+
+
+def _is_importer_module(mod):
+    if hasattr(mod, 'identifier') and hasattr(mod, 'import_data') and hasattr(mod, 'import_data_into_region') and hasattr(mod, 'parameters'):
+        return True
+    return False
 
 
 def available_importers():
-    return [
-        ragpdata.identifier(),
-        colonhrm.identifier(),
-    ]
+    pkgpath = os.path.dirname(imp.__file__)
+    package_names = [name for _, name, _ in pkgutil.iter_modules([pkgpath])]
+    importers = []
+    for name in package_names:
+        t = importlib.import_module(f'opencmiss.importer.{name}')
+        if _is_importer_module(t):
+            importers.append(t.identifier())
+    return importers
 
 
 def import_data(importer, inputs, working_directory):
-    outputs = None
-    if importer == ragpdata.identifier():
-        outputs = ragpdata.import_data(inputs, working_directory)
-    elif importer == colonhrm.identifier():
-        outputs = colonhrm.import_data(inputs, working_directory)
+    t = importlib.import_module(f'opencmiss.importer.{importer.lower()}')
+    if _is_importer_module(t):
+        return t.import_data(inputs, working_directory)
 
-    return outputs
+    raise OpenCMISSImportError(f"Unknown importer: {importer}")
 
 
 def import_parameters(importer):
-    parameters = {}
-    if importer == ragpdata.identifier():
-        parameters = ragpdata.parameters()
-    elif importer == colonhrm.identifier():
-        parameters = colonhrm.parameters()
+    t = importlib.import_module(f'opencmiss.importer.{importer.lower()}')
+    if _is_importer_module(t):
+        return t.parameters()
 
-    return parameters
+    raise OpenCMISSImportError(f"Unknown importer: {importer}")
 
 
 def main():
