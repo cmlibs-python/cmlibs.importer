@@ -1,7 +1,10 @@
 import os.path
 
 import numpy as np
-import trimesh
+try:
+    import trimesh
+except ImportError:
+    pass
 
 from opencmiss.zinc.context import Context
 from opencmiss.zinc.element import Element, Elementbasis

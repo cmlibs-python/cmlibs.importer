@@ -1,6 +1,9 @@
 from opencmiss.importer.errors import OpenCMISSImportUnknownParameter
 
-from opencmiss.importer.trimesh import import_data, import_data_into_region
+try:
+    from opencmiss.importer.trimesh import import_data, import_data_into_region
+except ImportError:
+    pass
 
 
 def identifier():
