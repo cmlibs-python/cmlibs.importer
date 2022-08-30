@@ -12,15 +12,15 @@ from opencmiss.zinc.field import Field
 from opencmiss.zinc.status import OK as ZINC_OK
 
 from opencmiss.importer.base import valid
-from opencmiss.importer.errors import OpenCMISSImportInvalidInputs, OpenCMISSImportUnknownParameter
+from opencmiss.importer.errors import OpenCMISSImportInvalidInputs
 from opencmiss.utils.zinc.field import findOrCreateFieldCoordinates
 from opencmiss.utils.zinc.finiteelement import createTriangleElements, createNodes
 from opencmiss.utils.zinc.general import ChangeManager
 
 
-def import_data_into_region(region, inputs):
-    if not valid(inputs, parameters("input")):
-        raise OpenCMISSImportInvalidInputs(f"Invalid input given to importer: {identifier()}")
+def base_import_data_into_region(region, inputs, identifier_fcn, parameters_fcn):
+    if not valid(inputs, parameters_fcn("input")):
+        raise OpenCMISSImportInvalidInputs(f"Invalid input given to importer: {identifier_fcn()}")
 
     input_file = inputs
 
@@ -89,11 +89,11 @@ def import_data_into_region(region, inputs):
                     line_count += 1
 
 
-def import_data(inputs, output_directory):
-    context = Context(identifier())
+def base_import_data(inputs, output_directory, identifier_fcn, parameters_fcn):
+    context = Context(identifier_fcn())
     region = context.getDefaultRegion()
 
-    import_data_into_region(region, inputs)
+    base_import_data_into_region(region, inputs, identifier_fcn, parameters_fcn)
 
     # Inputs has already been validated by this point so it is safe to use.
     filename_parts = os.path.splitext(os.path.basename(inputs))
@@ -105,34 +105,6 @@ def import_data(inputs, output_directory):
         output = output_exf
 
     return output
-
-
-# def identifier():
-#     return "Trimesh"
-
-
-# def parameters(parameter_name=None):
-#     importer_parameters = {
-#         "version": "0.1.0",
-#         "id": identifier(),
-#         "title": "Trimesh compatible meshes",
-#         "description":
-#             "Trimesh a library for loading and using triangular meshes.",
-#         "input": {
-#             "mimetype": "application/octet-stream",
-#         },
-#         "output": {
-#             "mimetype": "text/x.vnd.abi.exf+plain",
-#         }
-#     }
-#
-#     if parameter_name is not None:
-#         if parameter_name in importer_parameters:
-#             return importer_parameters[parameter_name]
-#         else:
-#             raise OpenCMISSImportUnknownParameter(f"Importer '{identifier()}' does not have parameter: {parameter_name}")
-#
-#     return importer_parameters
 
 
 class PointPare(object):

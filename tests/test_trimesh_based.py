@@ -1,9 +1,8 @@
 import os.path
 import unittest
 
-from opencmiss.importer import trimesh
 from opencmiss.importer.errors import OpenCMISSImportInvalidInputs
-from opencmiss.importer.trimesh import import_data
+from opencmiss.importer.obj import import_data
 from opencmiss.importer import stl
 from opencmiss.importer import ply
 from opencmiss.importer import obj
@@ -16,13 +15,13 @@ from tests.shared import resource_path
 class Trimesh(unittest.TestCase):
 
     def test_parameters(self):
-        parameters = trimesh.parameters()
+        parameters = obj.parameters()
 
         keys = set(parameters.keys())
         exp_keys = {"version", "id", "input", "output", "title", "description"}
 
         self.assertEqual(exp_keys, keys)
-        self.assertEqual("Trimesh", parameters["id"])
+        self.assertEqual("OBJ", parameters["id"])
         self.assertEqual(1, len(parameters["input"]))
         self.assertIn("mimetype", parameters["output"])
 
@@ -30,7 +29,7 @@ class Trimesh(unittest.TestCase):
         non_file = resource_path("nonexistent.xml")
         output_dir = resource_path("")
 
-        self.assertRaises(OpenCMISSImportInvalidInputs, import_data, non_file, output_dir)
+        self.assertRaises(OpenCMISSImportInvalidInputs, import_data, non_file, output_dir, )
 
     def test_parameters_stl(self):
         parameters = stl.parameters()

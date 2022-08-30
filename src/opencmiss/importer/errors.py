@@ -29,3 +29,7 @@ class OpenCMISSImportColonManometryError(OpenCMISSImportError):
 
 class OpenCMISSImportUnknownParameter(OpenCMISSImportError):
     pass
+
+
+class OpenCMISSImportNotImplemented(OpenCMISSImportError):
+    pass
