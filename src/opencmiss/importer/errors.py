@@ -7,6 +7,10 @@ class OpenCMISSImportInvalidInputs(OpenCMISSImportError):
     pass
 
 
+class OpenCMISSImportUnknownParameter(OpenCMISSImportError):
+    pass
+
+
 class OpenCMISSImportMBFXMLError(OpenCMISSImportError):
     pass
 
@@ -27,9 +31,5 @@ class OpenCMISSImportColonManometryError(OpenCMISSImportError):
     pass
 
 
-class OpenCMISSImportUnknownParameter(OpenCMISSImportError):
-    pass
-
-
-class OpenCMISSImportNotImplemented(OpenCMISSImportError):
+class OpenCMISSImportCellDensityError(OpenCMISSImportError):
     pass
