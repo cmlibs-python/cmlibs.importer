@@ -4,9 +4,19 @@ import os.path
 import pkgutil
 import sys
 
-from opencmiss.importer import ragpdata
-from opencmiss.importer import colonhrm
 import opencmiss.importer as imp
+
+from opencmiss.importer import celldensity
+from opencmiss.importer import colonhrm
+from opencmiss.importer import colonmanometry
+from opencmiss.importer import dxf
+from opencmiss.importer import mbfxml
+from opencmiss.importer import obj
+from opencmiss.importer import ply
+from opencmiss.importer import ragpdata
+from opencmiss.importer import stl
+from opencmiss.importer import svg
+
 from opencmiss.importer.errors import OpenCMISSImportError
 
 
@@ -56,6 +66,30 @@ def main():
     hrm_parser = subparsers.add_parser(colonhrm.identifier())
     hrm_parser.add_argument("colon_hrm_file", help="Colon HRM tab separated values file.")
 
+    cd_parser = subparsers.add_parser(celldensity.identifier())
+    cd_parser.add_argument("cell_density_file", help="Cell density csv file.")
+
+    cm_parser = subparsers.add_parser(colonmanometry.identifier())
+    cm_parser.add_argument("colon_manometry_file", help="Colon manometry file.")
+
+    dxf_parser = subparsers.add_parser(dxf.identifier())
+    dxf_parser.add_argument("dxf_file", help="DXF file.")
+
+    mbfxml_parser = subparsers.add_parser(mbfxml.identifier())
+    mbfxml_parser.add_argument("mbfxml_file", help="MBF XML file.")
+
+    obj_parser = subparsers.add_parser(obj.identifier())
+    obj_parser.add_argument("obj_file", help="OBJ file.")
+
+    ply_parser = subparsers.add_parser(ply.identifier())
+    ply_parser.add_argument("ply_file", help="PLY file.")
+
+    stl_parser = subparsers.add_parser(stl.identifier())
+    stl_parser.add_argument("cell_density_file", help="STL file.")
+
+    svg_parser = subparsers.add_parser(svg.identifier())
+    svg_parser.add_argument("svg_file", help="SVG file.")
+
     args = parser.parse_args()
 
     if args.list:
@@ -72,6 +106,22 @@ def main():
             inputs.extend(args.csv_file)
         elif args.importer == colonhrm.identifier():
             inputs.extend(args.colon_hrm_file)
+        elif args.importer == celldensity.identifier():
+            inputs.extend(args.cell_density_file)
+        elif args.importer == colonmanometry.identifier():
+            inputs.extend(args.colon_manometry_file)
+        elif args.importer == dxf.identifier():
+            inputs.extend(args.dxf_file)
+        elif args.importer == mbfxml.identifier():
+            inputs.extend(args.mbfxml_file)
+        elif args.importer == obj.identifier():
+            inputs.extend(args.obj_file)
+        elif args.importer == ply.identifier():
+            inputs.extend(args.ply_file)
+        elif args.importer == stl.identifier():
+            inputs.extend(args.stl_file)
+        elif args.importer == svg.identifier():
+            inputs.extend(args.svg_file)
 
         import_data(args.importer, inputs, args.output)
 
