@@ -5,19 +5,19 @@ from mbfxml2ex.app import read_xml
 from mbfxml2ex.exceptions import MBFXMLFormat
 from mbfxml2ex.zinc import load
 
-from opencmiss.utils.zinc.field import create_field_finite_element
-from opencmiss.zinc.context import Context
-from opencmiss.zinc.field import Field
-from opencmiss.zinc.status import OK as ZINC_OK
+from cmlibs.utils.zinc.field import create_field_finite_element
+from cmlibs.zinc.context import Context
+from cmlibs.zinc.field import Field
+from cmlibs.zinc.status import OK as ZINC_OK
 
-from opencmiss.importer.base import valid
-from opencmiss.importer.errors import OpenCMISSImportMBFXMLError, OpenCMISSImportGeneFileError, OpenCMISSImportInvalidInputs, OpenCMISSImportUnknownParameter
-from opencmiss.utils.zinc.general import ChangeManager
+from cmlibs.importer.base import valid
+from cmlibs.importer.errors import ImporterImportMBFXMLError, ImporterImportGeneFileError, ImporterImportInvalidInputs, ImporterImportUnknownParameter
+from cmlibs.utils.zinc.general import ChangeManager
 
 
 def import_data_into_region(region, inputs):
     if not valid(inputs, parameters("inputs")):
-        raise OpenCMISSImportInvalidInputs(f"Invalid inputs given to importer: {identifier()}")
+        raise ImporterImportInvalidInputs(f"Invalid inputs given to importer: {identifier()}")
 
     marker_file = inputs[0]
     gene_data_file = inputs[1]
@@ -25,7 +25,7 @@ def import_data_into_region(region, inputs):
     try:
         contents = read_xml(marker_file)
     except MBFXMLFormat:
-        raise OpenCMISSImportMBFXMLError("Marker file is not a valid MBF XML file.")
+        raise ImporterImportMBFXMLError("Marker file is not a valid MBF XML file.")
 
     field_module = region.getFieldmodule()
 
@@ -62,7 +62,7 @@ def import_data_into_region(region, inputs):
 
                         data_point = point_iter.next()
             except UnicodeDecodeError:
-                raise OpenCMISSImportGeneFileError("Gene CSV file not valid.")
+                raise ImporterImportGeneFileError("Gene CSV file not valid.")
 
 
 def import_data(inputs, output_directory):
@@ -112,6 +112,6 @@ def parameters(parameter_name=None):
         if parameter_name in importer_parameters:
             return importer_parameters[parameter_name]
         else:
-            raise OpenCMISSImportUnknownParameter(f"Importer '{identifier()}' does not have parameter: {parameter_name}")
+            raise ImporterImportUnknownParameter(f"Importer '{identifier()}' does not have parameter: {parameter_name}")
 
     return importer_parameters

@@ -6,13 +6,13 @@ import mbfxml2ex.exceptions
 from mbfxml2ex.app import read_xml
 from mbfxml2ex.zinc import load
 
-from opencmiss.utils.zinc.field import create_field_finite_element
-from opencmiss.zinc.context import Context
-from opencmiss.zinc.field import Field
+from cmlibs.utils.zinc.field import create_field_finite_element
+from cmlibs.zinc.context import Context
+from cmlibs.zinc.field import Field
 
-from opencmiss.importer import ragpdata
-from opencmiss.importer.errors import OpenCMISSImportInvalidInputs
-from opencmiss.importer.ragpdata import import_data
+from cmlibs.importer import ragpdata
+from cmlibs.importer.errors import ImporterImportInvalidInputs
+from cmlibs.importer.ragpdata import import_data
 
 from tests.shared import resource_path
 
@@ -123,14 +123,14 @@ class RAGPData(unittest.TestCase):
         csv_file = resource_path("gene_v_location.csv")
         output_dir = resource_path("")
 
-        self.assertRaises(OpenCMISSImportInvalidInputs, import_data, [xml_file, csv_file], output_dir)
+        self.assertRaises(ImporterImportInvalidInputs, import_data, [xml_file, csv_file], output_dir)
 
     def test_import_data_nonexistent_csv(self):
         xml_file = resource_path("gene_locations.xml")
         csv_file = resource_path("nonexistent.csv")
         output_dir = resource_path("")
 
-        self.assertRaises(OpenCMISSImportInvalidInputs, import_data, [xml_file, csv_file], output_dir)
+        self.assertRaises(ImporterImportInvalidInputs, import_data, [xml_file, csv_file], output_dir)
 
     def test_import_data(self):
         xml_file = resource_path("gene_locations.xml")

@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(here, 'src', 'opencmiss', 'importer', '__init__.py')) as fd:
+with open(os.path.join(here, 'src', 'cmlibs', 'importer', '__init__.py')) as fd:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
                         fd.read(), re.MULTILINE).group(1)
 
@@ -31,7 +31,7 @@ readme.append('')
 
 software_licence = readfile("LICENSE")
 
-requires = ["opencmiss.zinc"]
+requires = ["cmlibs.zinc"]
 requirements_mbfxml = [
     "mbfxml2ex",
 ]
@@ -47,15 +47,15 @@ requirements_svg = [
 requirements_all = list(set(requirements_svg + requirements_common + requirements_mbfxml))
 
 setup(
-    name='opencmiss.importer',
+    name='cmlibs.importer',
     version=version,
-    description='OpenCMISS Import functions.',
+    description='CMLibs Import functions.',
     long_description='\n'.join(readme) + software_licence,
     long_description_content_type='text/x-rst',
     classifiers=[],
     author='Hugh Sorby',
     author_email='h.sorby@auckland.ac.nz',
-    url='https://github.com/OpenCMISS-Bindings/opencmiss.importer',
+    url='https://github.com/CMLibs-Python/cmlibs.importer',
     license='Apache Software License',
     license_files=("LICENSE",),
     packages=find_packages("src"),
@@ -65,7 +65,7 @@ setup(
     install_requires=requires,
     entry_points={
         "console_scripts": [
-            "importer_app = opencmiss.importer.main:main"
+            "importer_app = cmlibs.importer.main:main"
         ]
     },
     extras_require={

@@ -4,24 +4,24 @@ from mbfxml2ex.app import read_xml
 from mbfxml2ex.exceptions import MBFXMLFormat
 from mbfxml2ex.zinc import load
 
-from opencmiss.zinc.context import Context
-from opencmiss.zinc.status import OK as ZINC_OK
+from cmlibs.zinc.context import Context
+from cmlibs.zinc.status import OK as ZINC_OK
 
-from opencmiss.importer.base import valid
-from opencmiss.importer.errors import OpenCMISSImportInvalidInputs, OpenCMISSImportUnknownParameter, OpenCMISSImportMBFXMLError
-from opencmiss.utils.zinc.general import ChangeManager
+from cmlibs.importer.base import valid
+from cmlibs.importer.errors import ImporterImportInvalidInputs, ImporterImportUnknownParameter, ImporterImportMBFXMLError
+from cmlibs.utils.zinc.general import ChangeManager
 
 
 def import_data_into_region(region, inputs):
     if not valid(inputs, parameters("input")):
-        raise OpenCMISSImportInvalidInputs(f"Invalid input given to importer: {identifier()}")
+        raise ImporterImportInvalidInputs(f"Invalid input given to importer: {identifier()}")
 
     xml_file = inputs
 
     try:
         contents = read_xml(xml_file)
     except MBFXMLFormat:
-        raise OpenCMISSImportMBFXMLError("Given file is not a valid MBF XML file.")
+        raise ImporterImportMBFXMLError("Given file is not a valid MBF XML file.")
 
     field_module = region.getFieldmodule()
 
@@ -71,6 +71,6 @@ def parameters(parameter_name=None):
         if parameter_name in importer_parameters:
             return importer_parameters[parameter_name]
         else:
-            raise OpenCMISSImportUnknownParameter(f"Importer '{identifier()}' does not have parameter: {parameter_name}")
+            raise ImporterImportUnknownParameter(f"Importer '{identifier()}' does not have parameter: {parameter_name}")
 
     return importer_parameters

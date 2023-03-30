@@ -4,20 +4,20 @@ import os.path
 import pkgutil
 import sys
 
-import opencmiss.importer as imp
+import cmlibs.importer as imp
 
-from opencmiss.importer import celldensity
-from opencmiss.importer import colonhrm
-from opencmiss.importer import colonmanometry
-from opencmiss.importer import dxf
-from opencmiss.importer import mbfxml
-from opencmiss.importer import obj
-from opencmiss.importer import ply
-from opencmiss.importer import ragpdata
-from opencmiss.importer import stl
-from opencmiss.importer import svg
+from cmlibs.importer import celldensity
+from cmlibs.importer import colonhrm
+from cmlibs.importer import colonmanometry
+from cmlibs.importer import dxf
+from cmlibs.importer import mbfxml
+from cmlibs.importer import obj
+from cmlibs.importer import ply
+from cmlibs.importer import ragpdata
+from cmlibs.importer import stl
+from cmlibs.importer import svg
 
-from opencmiss.importer.errors import OpenCMISSImportError
+from cmlibs.importer.errors import ImporterImportError
 
 
 def _is_importer_module(mod):
@@ -31,30 +31,30 @@ def available_importers():
     package_names = [name for _, name, _ in pkgutil.iter_modules([pkgpath])]
     importers = []
     for name in package_names:
-        t = importlib.import_module(f'opencmiss.importer.{name}')
+        t = importlib.import_module(f'cmlibs.importer.{name}')
         if _is_importer_module(t):
             importers.append(t.identifier())
     return importers
 
 
 def import_data(importer, inputs, working_directory):
-    t = importlib.import_module(f'opencmiss.importer.{importer.lower()}')
+    t = importlib.import_module(f'cmlibs.importer.{importer.lower()}')
     if _is_importer_module(t):
         return t.import_data(inputs, working_directory)
 
-    raise OpenCMISSImportError(f"Unknown importer: {importer}")
+    raise ImporterImportError(f"Unknown importer: {importer}")
 
 
 def import_parameters(importer):
-    t = importlib.import_module(f'opencmiss.importer.{importer.lower()}')
+    t = importlib.import_module(f'cmlibs.importer.{importer.lower()}')
     if _is_importer_module(t):
         return t.parameters()
 
-    raise OpenCMISSImportError(f"Unknown importer: {importer}")
+    raise ImporterImportError(f"Unknown importer: {importer}")
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Import data into OpenCMISS-Zinc.')
+    parser = argparse.ArgumentParser(description='Import data into Zinc.')
     parser.add_argument("-o", "--output", default=os.curdir, help='output directory, default is the current directory.')
     parser.add_argument("-l", "--list", help="list available importers", action='store_true')
     subparsers = parser.add_subparsers(dest="importer", help="types of importer")

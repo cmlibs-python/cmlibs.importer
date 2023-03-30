@@ -1,13 +1,13 @@
 import os.path
 import unittest
 
-from opencmiss.importer.errors import OpenCMISSImportInvalidInputs
-from opencmiss.importer.obj import import_data
-from opencmiss.importer import stl
-from opencmiss.importer import ply
-from opencmiss.importer import obj
-from opencmiss.importer import svg
-from opencmiss.importer import dxf
+from cmlibs.importer.errors import ImporterImportInvalidInputs
+from cmlibs.importer.obj import import_data
+from cmlibs.importer import stl
+from cmlibs.importer import ply
+from cmlibs.importer import obj
+from cmlibs.importer import svg
+from cmlibs.importer import dxf
 
 from tests.shared import resource_path
 
@@ -29,7 +29,7 @@ class Trimesh(unittest.TestCase):
         non_file = resource_path("nonexistent.xml")
         output_dir = resource_path("")
 
-        self.assertRaises(OpenCMISSImportInvalidInputs, import_data, non_file, output_dir, )
+        self.assertRaises(ImporterImportInvalidInputs, import_data, non_file, output_dir, )
 
     def test_parameters_stl(self):
         parameters = stl.parameters()
