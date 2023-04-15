@@ -1,14 +1,14 @@
 import csv
 import os.path
 
-from opencmiss.utils.zinc.field import create_field_finite_element, create_field_coordinates, find_or_create_field_group, find_or_create_field_stored_string
-from opencmiss.zinc.context import Context
-from opencmiss.zinc.field import Field
-from opencmiss.zinc.status import OK as ZINC_OK
+from cmlibs.utils.zinc.field import create_field_finite_element, create_field_coordinates, find_or_create_field_group, find_or_create_field_stored_string
+from cmlibs.zinc.context import Context
+from cmlibs.zinc.field import Field
+from cmlibs.zinc.status import OK as ZINC_OK
 
-from opencmiss.importer.base import valid
-from opencmiss.importer.errors import OpenCMISSImportInvalidInputs, OpenCMISSImportUnknownParameter, OpenCMISSImportCellDensityError
-from opencmiss.utils.zinc.general import ChangeManager
+from cmlibs.importer.base import valid
+from cmlibs.importer.errors import ImporterImportInvalidInputs, ImporterImportUnknownParameter, ImporterImportCellDensityError
+from cmlibs.utils.zinc.general import ChangeManager
 
 
 def import_data_into_region(region, inputs):
@@ -16,7 +16,7 @@ def import_data_into_region(region, inputs):
         inputs = inputs[0]
 
     if not valid(inputs, parameters("input")):
-        raise OpenCMISSImportInvalidInputs(f"Invalid input given to importer: {identifier()}")
+        raise ImporterImportInvalidInputs(f"Invalid input given to importer: {identifier()}")
 
     cell_density_data = {}
 
@@ -36,10 +36,10 @@ def import_data_into_region(region, inputs):
                     cell_density_data["cell_types"].append(row.pop(0))
                     cell_density_data["cell_densities"].append([float(r) for r in row])
         except UnicodeDecodeError:
-            raise OpenCMISSImportCellDensityError("Cell density file is not valid.")
+            raise ImporterImportCellDensityError("Cell density file is not valid.")
 
     if len(cell_density_data["group_names"]) == 0:
-        raise OpenCMISSImportCellDensityError("Cell density file is not valid.")
+        raise ImporterImportCellDensityError("Cell density file is not valid.")
 
     # Transpose the cell densities.
     transposed_tuples = list(zip(*cell_density_data["cell_densities"]))
@@ -129,6 +129,6 @@ def parameters(parameter_name=None):
         if parameter_name in importer_parameters:
             return importer_parameters[parameter_name]
         else:
-            raise OpenCMISSImportUnknownParameter(f"Importer '{identifier()}' does not have parameter: {parameter_name}")
+            raise ImporterImportUnknownParameter(f"Importer '{identifier()}' does not have parameter: {parameter_name}")
 
     return importer_parameters

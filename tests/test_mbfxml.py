@@ -1,9 +1,9 @@
 import os.path
 import unittest
 
-from opencmiss.importer import mbfxml
-from opencmiss.importer.errors import OpenCMISSImportInvalidInputs
-from opencmiss.importer.mbfxml import import_data
+from cmlibs.importer import mbfxml
+from cmlibs.importer.errors import ImporterImportInvalidInputs
+from cmlibs.importer.mbfxml import import_data
 
 from tests.shared import resource_path
 
@@ -25,7 +25,7 @@ class MBFXML(unittest.TestCase):
         xml_file = resource_path("nonexistent.xml")
         output_dir = resource_path("")
 
-        self.assertRaises(OpenCMISSImportInvalidInputs, import_data, xml_file, output_dir)
+        self.assertRaises(ImporterImportInvalidInputs, import_data, xml_file, output_dir)
 
     def test_import_data(self):
         xml_file = resource_path("mbf_contours.xml")

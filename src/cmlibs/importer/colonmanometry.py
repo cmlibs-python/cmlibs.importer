@@ -1,14 +1,14 @@
 import csv
 import os.path
 
-from opencmiss.utils.zinc.field import create_field_finite_element, find_or_create_field_stored_string, find_or_create_field_group
-from opencmiss.zinc.context import Context
-from opencmiss.zinc.field import Field
-from opencmiss.zinc.status import OK as ZINC_OK
+from cmlibs.utils.zinc.field import create_field_finite_element, find_or_create_field_stored_string, find_or_create_field_group
+from cmlibs.zinc.context import Context
+from cmlibs.zinc.field import Field
+from cmlibs.zinc.status import OK as ZINC_OK
 
-from opencmiss.importer.base import valid
-from opencmiss.importer.errors import OpenCMISSImportInvalidInputs, OpenCMISSImportUnknownParameter, OpenCMISSImportColonManometryError
-from opencmiss.utils.zinc.general import ChangeManager
+from cmlibs.importer.base import valid
+from cmlibs.importer.errors import ImporterImportInvalidInputs, ImporterImportUnknownParameter, ImporterImportColonManometryError
+from cmlibs.utils.zinc.general import ChangeManager
 
 
 def import_data_into_region(region, inputs):
@@ -16,7 +16,7 @@ def import_data_into_region(region, inputs):
         inputs = inputs[0]
 
     if not valid(inputs, parameters("input")):
-        raise OpenCMISSImportInvalidInputs(f"Invalid input given to importer: {identifier()}")
+        raise ImporterImportInvalidInputs(f"Invalid input given to importer: {identifier()}")
 
     manometry_data = inputs
     field_module = region.getFieldmodule()
@@ -29,7 +29,7 @@ def import_data_into_region(region, inputs):
                 for row in csv_reader:
                     heading = row.pop(0)
                     if first_row and heading != 'Time':
-                        raise OpenCMISSImportColonManometryError("Colon manometry file is not valid.")
+                        raise ImporterImportColonManometryError("Colon manometry file is not valid.")
 
                     if heading == 'Time':
                         first_row = False
@@ -38,9 +38,9 @@ def import_data_into_region(region, inputs):
                         values = row[:]
                         _create_node(field_module, heading, times, values)
             except UnicodeDecodeError:
-                raise OpenCMISSImportColonManometryError("Colon manometry file is not valid.")
+                raise ImporterImportColonManometryError("Colon manometry file is not valid.")
             except ValueError:
-                raise OpenCMISSImportColonManometryError("Colon manometry file is not valid.")
+                raise ImporterImportColonManometryError("Colon manometry file is not valid.")
 
 
 def import_data(inputs, output_directory):
@@ -118,6 +118,6 @@ def parameters(parameter_name=None):
         if parameter_name in importer_parameters:
             return importer_parameters[parameter_name]
         else:
-            raise OpenCMISSImportUnknownParameter(f"Importer '{identifier()}' does not have parameter: {parameter_name}")
+            raise ImporterImportUnknownParameter(f"Importer '{identifier()}' does not have parameter: {parameter_name}")
 
     return importer_parameters

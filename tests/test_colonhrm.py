@@ -1,9 +1,9 @@
 import os.path
 import unittest
 
-from opencmiss.importer import colonhrm
-from opencmiss.importer.colonhrm import import_data
-from opencmiss.importer.errors import OpenCMISSImportInvalidInputs, OpenCMISSImportColonHRMError
+from cmlibs.importer import colonhrm
+from cmlibs.importer.colonhrm import import_data
+from cmlibs.importer.errors import ImporterImportInvalidInputs, ImporterImportColonHRMError
 
 from tests.shared import resource_path
 
@@ -37,16 +37,16 @@ class ColonHRM(unittest.TestCase):
         nonexistent_file = resource_path("nonexistent.file")
         output_dir = resource_path("")
 
-        self.assertRaises(OpenCMISSImportInvalidInputs, import_data, nonexistent_file, output_dir)
+        self.assertRaises(ImporterImportInvalidInputs, import_data, nonexistent_file, output_dir)
 
     def test_import_data_invalid_hrm_file_1(self):
         nonexistent_file = resource_path("white_image.jpeg")
         output_dir = resource_path("")
 
-        self.assertRaises(OpenCMISSImportColonHRMError, import_data, nonexistent_file, output_dir)
+        self.assertRaises(ImporterImportColonHRMError, import_data, nonexistent_file, output_dir)
 
     def test_import_data_invalid_hrm_file_2(self):
         nonexistent_file = resource_path("plain_text.txt")
         output_dir = resource_path("")
 
-        self.assertRaises(OpenCMISSImportColonHRMError, import_data, nonexistent_file, output_dir)
+        self.assertRaises(ImporterImportColonHRMError, import_data, nonexistent_file, output_dir)

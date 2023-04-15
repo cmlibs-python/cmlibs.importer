@@ -1,14 +1,14 @@
 import csv
 import os.path
 
-from opencmiss.utils.zinc.field import create_field_finite_element, create_field_coordinates, find_or_create_field_group, find_or_create_field_stored_string
-from opencmiss.zinc.context import Context
-from opencmiss.zinc.field import Field
-from opencmiss.zinc.status import OK as ZINC_OK
+from cmlibs.utils.zinc.field import create_field_finite_element, create_field_coordinates, find_or_create_field_group, find_or_create_field_stored_string
+from cmlibs.zinc.context import Context
+from cmlibs.zinc.field import Field
+from cmlibs.zinc.status import OK as ZINC_OK
 
-from opencmiss.importer.base import valid
-from opencmiss.importer.errors import OpenCMISSImportInvalidInputs, OpenCMISSImportUnknownParameter, OpenCMISSImportColonHRMError
-from opencmiss.utils.zinc.general import ChangeManager
+from cmlibs.importer.base import valid
+from cmlibs.importer.errors import ImporterImportInvalidInputs, ImporterImportUnknownParameter, ImporterImportColonHRMError
+from cmlibs.utils.zinc.general import ChangeManager
 
 
 def import_data_into_region(region, inputs):
@@ -16,7 +16,7 @@ def import_data_into_region(region, inputs):
         inputs = inputs[0]
 
     if not valid(inputs, parameters("input")):
-        raise OpenCMISSImportInvalidInputs(f"Invalid input given to importer: {identifier()}")
+        raise ImporterImportInvalidInputs(f"Invalid input given to importer: {identifier()}")
 
     manometry_data = inputs
     field_module = region.getFieldmodule()
@@ -30,9 +30,9 @@ def import_data_into_region(region, inputs):
             for row in csv_reader:
                 times.append(float(row[0]))
         except UnicodeDecodeError:
-            raise OpenCMISSImportColonHRMError("Colon HRM file is not valid.")
+            raise ImporterImportColonHRMError("Colon HRM file is not valid.")
         except ValueError:
-            raise OpenCMISSImportColonHRMError("Colon HRM file is not valid.")
+            raise ImporterImportColonHRMError("Colon HRM file is not valid.")
 
     with ChangeManager(field_module):
         with open(manometry_data) as f:
@@ -136,6 +136,6 @@ def parameters(parameter_name=None):
         if parameter_name in importer_parameters:
             return importer_parameters[parameter_name]
         else:
-            raise OpenCMISSImportUnknownParameter(f"Importer '{identifier()}' does not have parameter: {parameter_name}")
+            raise ImporterImportUnknownParameter(f"Importer '{identifier()}' does not have parameter: {parameter_name}")
 
     return importer_parameters

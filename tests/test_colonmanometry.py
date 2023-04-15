@@ -1,9 +1,9 @@
 import os.path
 import unittest
 
-from opencmiss.importer import colonmanometry
-from opencmiss.importer.colonmanometry import import_data
-from opencmiss.importer.errors import OpenCMISSImportInvalidInputs, OpenCMISSImportColonManometryError
+from cmlibs.importer import colonmanometry
+from cmlibs.importer.colonmanometry import import_data
+from cmlibs.importer.errors import ImporterImportInvalidInputs, ImporterImportColonManometryError
 
 from tests.shared import resource_path
 
@@ -50,16 +50,16 @@ class ColonManometry(unittest.TestCase):
         nonexistent_file = resource_path("nonexistent.file")
         output_dir = resource_path("")
 
-        self.assertRaises(OpenCMISSImportInvalidInputs, import_data, nonexistent_file, output_dir)
+        self.assertRaises(ImporterImportInvalidInputs, import_data, nonexistent_file, output_dir)
 
     def test_import_data_invalid_manometry_file_1(self):
         nonexistent_file = resource_path("white_image.jpeg")
         output_dir = resource_path("")
 
-        self.assertRaises(OpenCMISSImportColonManometryError, import_data, nonexistent_file, output_dir)
+        self.assertRaises(ImporterImportColonManometryError, import_data, nonexistent_file, output_dir)
 
     def test_import_data_invalid_manometry_file_2(self):
         nonexistent_file = resource_path("plain_text.txt")
         output_dir = resource_path("")
 
-        self.assertRaises(OpenCMISSImportColonManometryError, import_data, nonexistent_file, output_dir)
+        self.assertRaises(ImporterImportColonManometryError, import_data, nonexistent_file, output_dir)

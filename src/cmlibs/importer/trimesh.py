@@ -6,21 +6,21 @@ try:
 except ImportError:
     pass
 
-from opencmiss.zinc.context import Context
-from opencmiss.zinc.element import Element, Elementbasis
-from opencmiss.zinc.field import Field
-from opencmiss.zinc.status import OK as ZINC_OK
+from cmlibs.zinc.context import Context
+from cmlibs.zinc.element import Element, Elementbasis
+from cmlibs.zinc.field import Field
+from cmlibs.zinc.status import OK as ZINC_OK
 
-from opencmiss.importer.base import valid
-from opencmiss.importer.errors import OpenCMISSImportInvalidInputs
-from opencmiss.utils.zinc.field import findOrCreateFieldCoordinates
-from opencmiss.utils.zinc.finiteelement import createTriangleElements, createNodes
-from opencmiss.utils.zinc.general import ChangeManager
+from cmlibs.importer.base import valid
+from cmlibs.importer.errors import ImporterImportInvalidInputs
+from cmlibs.utils.zinc.field import findOrCreateFieldCoordinates
+from cmlibs.utils.zinc.finiteelement import createTriangleElements, createNodes
+from cmlibs.utils.zinc.general import ChangeManager
 
 
 def base_import_data_into_region(region, inputs, identifier_fcn, parameters_fcn):
     if not valid(inputs, parameters_fcn("input")):
-        raise OpenCMISSImportInvalidInputs(f"Invalid input given to importer: {identifier_fcn()}")
+        raise ImporterImportInvalidInputs(f"Invalid input given to importer: {identifier_fcn()}")
 
     input_file = inputs
 

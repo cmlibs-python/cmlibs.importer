@@ -1,7 +1,7 @@
-OpenCMISS Importer
-==================
+CMLibs Importer
+===============
 
-**OpenCMISS Importer** is a Python package for importing different formats into OpenCMISS Zinc.
+**CMLibs Importer** is a Python package for importing different formats into Zinc.
 The importer can import the following formats:
 
 * ColonHRM
