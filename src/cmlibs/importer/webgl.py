@@ -11,7 +11,7 @@ from cmlibs.importer.base import valid
 from cmlibs.importer.errors import ImporterImportInvalidInputs, ImporterImportUnknownParameter, ImporterImportError
 
 
-def load_mesh_from_json(region, contents):
+def _load_mesh_from_json(region, contents):
     """
     Loads a Zinc mesh from dictionary of WebGL triangular mesh information.
     """
@@ -26,17 +26,17 @@ def load_mesh_from_json(region, contents):
     coordinate_field.setTypeCoordinate(True)
 
     # Create nodes.
-    node_coordinates = group_coordinates(contents['vertices'], 3)
+    node_coordinates = _group_coordinates(contents['vertices'], 3)
     create_nodes(coordinate_field, node_coordinates)
 
     # Create elements.
     mesh = field_module.findMeshByDimension(2)
-    element_node_set = group_element_nodes(contents['faces'], 3)
-    increment_node_identifiers(element_node_set)
+    element_node_set = _group_element_nodes(contents['faces'], 3)
+    _increment_node_identifiers(element_node_set)
     create_triangle_elements(mesh, coordinate_field, element_node_set)
 
 
-def group_coordinates(coordinate_list, dimensions):
+def _group_coordinates(coordinate_list, dimensions):
     if hasattr(coordinate_list[0], '__iter__'):
         return coordinate_list
 
@@ -50,7 +50,7 @@ def group_coordinates(coordinate_list, dimensions):
     return node_list
 
 
-def group_element_nodes(element_list, dimensions):
+def _group_element_nodes(element_list, dimensions):
     if hasattr(element_list[0], '__iter__'):
         return element_list
 
@@ -60,7 +60,7 @@ def group_element_nodes(element_list, dimensions):
     return element_node_set
 
 
-def increment_node_identifiers(element_node_set):
+def _increment_node_identifiers(element_node_set):
     for element in element_node_set:
         if 0 in element:
             break
@@ -88,7 +88,7 @@ def import_data_into_region(region, inputs):
 
     field_module = region.getFieldmodule()
     with ChangeManager(field_module):
-        load_mesh_from_json(region, contents)
+        _load_mesh_from_json(region, contents)
 
 
 def import_data(inputs, output_directory):
