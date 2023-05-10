@@ -118,7 +118,9 @@ def parameters(parameter_name=None):
         "version": "0.1.0",
         "id": identifier(),
         "title": "WebGL JSON",
-        "description": "",
+        "description":
+            "WebGL JSON file format. This is a file format produced by the CMLibs WebGL ArgonSceneExporter. It contains lists of nodes "
+            "and faces that can be used to create a CMLibs Zinc triangular-element mesh.",
         "input": {
             "mimetype": "application/json",
         },
