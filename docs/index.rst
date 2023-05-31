@@ -14,6 +14,7 @@ The importer can import the following formats:
 * STL
 * SVG
 * Trimesh
+* WebGL JSON
 
 Each importer adheres to the same API:
 
