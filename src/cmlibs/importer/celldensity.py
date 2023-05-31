@@ -1,7 +1,7 @@
 import csv
 import os.path
 
-from cmlibs.utils.zinc.field import create_field_finite_element, create_field_coordinates, find_or_create_field_group, find_or_create_field_stored_string
+from cmlibs.utils.zinc.field import create_field_finite_element, find_or_create_field_group
 from cmlibs.zinc.context import Context
 from cmlibs.zinc.field import Field
 from cmlibs.zinc.status import OK as ZINC_OK
