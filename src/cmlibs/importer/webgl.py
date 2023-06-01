@@ -4,11 +4,11 @@ import json
 from cmlibs.zinc.context import Context
 from cmlibs.zinc.status import OK as ZINC_OK
 
+from cmlibs.importer.base import valid
+from cmlibs.importer.errors import ImporterImportInvalidInputs, ImporterImportUnknownParameter
+from cmlibs.importer.pointpare import PointPare
 from cmlibs.utils.zinc.general import ChangeManager
 from cmlibs.utils.zinc.finiteelement import create_nodes, create_triangle_elements
-
-from cmlibs.importer.base import valid
-from cmlibs.importer.errors import ImporterImportInvalidInputs, ImporterImportUnknownParameter, ImporterImportError
 
 
 def _load_mesh_from_json(region, contents, coordinate_field_name):
@@ -26,15 +26,28 @@ def _load_mesh_from_json(region, contents, coordinate_field_name):
     coordinate_field.setTypeCoordinate(True)
 
     # Create nodes.
-    node_set_size = field_module.findNodesetByName('nodes').getSize()
+    # node_set_size = field_module.findNodesetByName('nodes').getSize()
     node_coordinates = _group_coordinates(contents['vertices'], 3)
-    create_nodes(coordinate_field, node_coordinates)
+
+    pp = PointPare()
+    pp.add_points(node_coordinates)
+    pp.pare_points()
+
+    create_nodes(coordinate_field, pp.get_pared_points())
 
     # Create elements.
     mesh = field_module.findMeshByDimension(2)
     element_node_set = _group_element_nodes(contents['faces'], 3)
-    _increment_node_identifiers(element_node_set, node_set_size + 1)
-    create_triangle_elements(mesh, coordinate_field, element_node_set)
+    pared_element_node_set = []
+    for element_nodes in element_node_set:
+        pared_element_nodes = []
+        for node_id in element_nodes:
+            pared_element_nodes.append(pp.get_pared_index(node_id) + 1)
+
+        pared_element_node_set.append(pared_element_nodes)
+
+    # _increment_node_identifiers(pared_element_node_set, node_set_size + 1)
+    create_triangle_elements(mesh, coordinate_field, pared_element_node_set)
 
 
 def _group_coordinates(coordinate_list, dimensions):

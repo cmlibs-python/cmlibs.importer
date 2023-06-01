@@ -27,7 +27,7 @@ class WebGLJSON(unittest.TestCase):
         self.assertRaises(ImporterImportInvalidInputs, webgl.import_data, json_file, output_dir)
 
     def test_import_data(self):
-        json_file = resource_path("webgl_contours.json")
+        json_file = resource_path("webgl_contours_small.json")
         output_dir = resource_path("")
 
         output_exf = webgl.import_data(json_file, output_dir)
@@ -37,7 +37,21 @@ class WebGLJSON(unittest.TestCase):
         with open(output_exf) as f:
             lines = f.readlines()
 
-        self.assertEqual(240210, len(lines))
+        self.assertEqual(204, len(lines))
+        os.remove(output_exf)
+
+    def test_import_data_separate(self):
+        json_file = resource_path("webgl_contours_separate.json")
+        output_dir = resource_path("")
+
+        output_exf = webgl.import_data(json_file, output_dir)
+
+        self.assertTrue(os.path.isfile(output_exf))
+
+        with open(output_exf) as f:
+            lines = f.readlines()
+
+        self.assertEqual(378, len(lines))
         os.remove(output_exf)
 
 
