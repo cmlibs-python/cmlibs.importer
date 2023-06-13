@@ -4,7 +4,6 @@ class PointPare(object):
         self._pared_points = []
         self._points = []
         self._point_map = {}
-        # self.clear_points()
 
     def clear_points(self):
         self._points = []
@@ -34,7 +33,7 @@ class PointPare(object):
                 elif dim == 1 and c not in tmp[c_prev[0]]:
                     tmp[c_prev[0]][c] = {}
                 elif dim == 2 and c not in tmp[c_prev[0]][c_prev[1]]:
-                    tmp[c_prev[0]][c_prev[1]] = {}
+                    tmp[c_prev[0]][c_prev[1]][c] = -1
                     new_point = True
 
                 c_prev.append(c)

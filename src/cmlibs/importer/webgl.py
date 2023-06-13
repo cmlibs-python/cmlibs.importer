@@ -26,7 +26,6 @@ def _load_mesh_from_json(region, contents, coordinate_field_name):
     coordinate_field.setTypeCoordinate(True)
 
     # Create nodes.
-    # node_set_size = field_module.findNodesetByName('nodes').getSize()
     node_coordinates = _group_coordinates(contents['vertices'], 3)
 
     pp = PointPare()
@@ -46,7 +45,6 @@ def _load_mesh_from_json(region, contents, coordinate_field_name):
 
         pared_element_node_set.append(pared_element_nodes)
 
-    # _increment_node_identifiers(pared_element_node_set, node_set_size + 1)
     create_triangle_elements(mesh, coordinate_field, pared_element_node_set)
 
 
