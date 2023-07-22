@@ -83,18 +83,14 @@ def _setup_nodes(field_module, times, num_sensors):
     stimulation_field = create_field_finite_element(field_module, "stimulation", 1, type_coordinate=False)
     data_points = field_module.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_DATAPOINTS)
 
-    group_field = find_or_create_field_group(field_module, "marker")
-    node_group_field = group_field.getFieldNodeGroup(data_points)
-    if not node_group_field.isValid():
-        node_group_field = group_field.createFieldNodeGroup(data_points)
-
     data_template = data_points.createNodetemplate()
     data_template.defineField(coordinate_field)
     data_template.defineField(name_field)
     data_template.defineField(pressure_field)
     data_template.defineField(stimulation_field)
 
-    nodeset_group = node_group_field.getNodesetGroup()
+    group_field = find_or_create_field_group(field_module, "marker")
+    nodeset_group = group_field.getOrCreateNodesetGroup(data_points)
 
     time_sequence = field_module.getMatchingTimesequence(times)
 

@@ -57,15 +57,11 @@ def import_data_into_region(region, inputs):
 
         for group_index, group_name in enumerate(cell_density_data["group_names"]):
             group_field = find_or_create_field_group(field_module, group_name)
-            node_group_field = group_field.getFieldNodeGroup(data_points)
-            if not node_group_field.isValid():
-                node_group_field = group_field.createFieldNodeGroup(data_points)
-
-            nodeset_group = node_group_field.getNodesetGroup()
+            data_points_group = group_field.getOrCreateNodesetGroup(data_points)
 
             field_cache = field_module.createFieldcache()
             node = data_points.createNode(-1, data_template)
-            nodeset_group.addNode(node)
+            data_points_group.addNode(node)
             field_cache.setNode(node)
 
             cell_densities = cell_density_data["cell_densities"][group_index]
@@ -94,11 +90,6 @@ def import_data(inputs, output_directory):
 def _setup_nodes(field_module):
     cell_density_field = create_field_finite_element(field_module, "cell_density", 1, type_coordinate=False)
     data_points = field_module.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_DATAPOINTS)
-
-    group_field = find_or_create_field_group(field_module, "cell_density_region")
-    node_group_field = group_field.getFieldNodeGroup(data_points)
-    if not node_group_field.isValid():
-        node_group_field = group_field.createFieldNodeGroup(data_points)
 
     data_template = data_points.createNodetemplate()
     data_template.defineField(cell_density_field)
