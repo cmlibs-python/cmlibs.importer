@@ -1,4 +1,5 @@
 import os.path
+from pointpare import PointPare
 
 import numpy as np
 try:
@@ -13,7 +14,6 @@ from cmlibs.zinc.status import OK as ZINC_OK
 
 from cmlibs.importer.base import valid
 from cmlibs.importer.errors import ImporterImportInvalidInputs
-from cmlibs.importer.pointpare import PointPare
 from cmlibs.utils.zinc.field import findOrCreateFieldCoordinates
 from cmlibs.utils.zinc.finiteelement import createTriangleElements, createNodes
 from cmlibs.utils.zinc.general import ChangeManager

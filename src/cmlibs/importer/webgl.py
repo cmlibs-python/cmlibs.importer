@@ -1,12 +1,12 @@
 import os
 import json
+from pointpare import PointPare
 
 from cmlibs.zinc.context import Context
 from cmlibs.zinc.status import OK as ZINC_OK
 
 from cmlibs.importer.base import valid
 from cmlibs.importer.errors import ImporterImportInvalidInputs, ImporterImportUnknownParameter
-from cmlibs.importer.pointpare import PointPare
 from cmlibs.utils.zinc.general import ChangeManager
 from cmlibs.utils.zinc.finiteelement import create_nodes, create_triangle_elements
 

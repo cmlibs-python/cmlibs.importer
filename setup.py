@@ -31,7 +31,7 @@ readme.append('')
 
 software_licence = readfile("LICENSE")
 
-requires = ["cmlibs.zinc"]
+requires = ["cmlibs.zinc", "pointpare"]
 requirements_mbfxml = [
     "mbfxml2ex",
 ]
