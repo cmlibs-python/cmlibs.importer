@@ -33,3 +33,7 @@ class ImporterImportColonManometryError(ImporterImportError):
 
 class ImporterImportCellDensityError(ImporterImportError):
     pass
+
+
+class ImporterImportPointCloudError(ImporterImportError):
+    pass
