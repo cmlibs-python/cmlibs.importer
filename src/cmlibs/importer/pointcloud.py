@@ -1,7 +1,7 @@
 import csv
 import os.path
 
-from cmlibs.utils.zinc.field import create_field_finite_element, find_or_create_field_group
+from cmlibs.utils.zinc.field import create_field_finite_element
 from cmlibs.zinc.context import Context
 from cmlibs.zinc.field import Field
 from cmlibs.zinc.status import OK as ZINC_OK
@@ -18,8 +18,6 @@ def import_data_into_region(region, inputs):
     if not valid(inputs, parameters("input")):
         raise ImporterImportInvalidInputs(f"Invalid input given to importer: {identifier()}")
 
-    cell_density_data = {}
-
     field_module = region.getFieldmodule()
 
     datapoint_field = None
@@ -34,7 +32,6 @@ def import_data_into_region(region, inputs):
                 for row in csv_reader:
                     if first_row:
                         first_row = False
-                        # Remove Cell type column
                         if len(row) == 3:
                             try:
                                 component_names = ["X", "Y", "Z"]
@@ -85,14 +82,6 @@ def import_data(inputs, output_directory):
         output = output_exf
 
     return output
-
-
-def _setup_nodes(field_module):
-    coordinate_field = create_field_finite_element(field_module, "coordinates", 3, type_coordinate=True)
-    data_points = field_module.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_DATAPOINTS)
-
-    data_template = data_points.createNodetemplate()
-    data_template.defineField(coordinate_field)
 
 
 def identifier():
