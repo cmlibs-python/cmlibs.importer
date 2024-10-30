@@ -15,7 +15,7 @@ from cmlibs.zinc.status import OK as ZINC_OK
 from cmlibs.importer.base import valid
 from cmlibs.importer.errors import ImporterImportInvalidInputs
 from cmlibs.utils.zinc.field import findOrCreateFieldCoordinates
-from cmlibs.utils.zinc.finiteelement import createTriangleElements, createNodes
+from cmlibs.utils.zinc.finiteelement import createTriangleElements, create_nodes
 from cmlibs.utils.zinc.general import ChangeManager
 
 
@@ -33,11 +33,13 @@ def base_import_data_into_region(region, inputs, identifier_fcn, parameters_fcn)
         node_set = field_module.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
 
         if isinstance(mesh, trimesh.Trimesh):
-            createNodes(coordinates, mesh.vertices.tolist(), node_set=node_set)
+            create_nodes(coordinates, mesh.vertices.tolist(), node_set=node_set)
             mesh2d = field_module.findMeshByDimension(2)
             # Trimesh triangles are zero-based, Zinc is 1-based
             triangles = mesh.faces + 1
             createTriangleElements(mesh2d, coordinates, triangles.tolist())
+        elif isinstance(mesh, trimesh.points.PointCloud):
+            create_nodes(coordinates, mesh.vertices.tolist(), node_set_name="datapoints")
         else:
             stacked = [trimesh.util.stack_lines(e.discrete(mesh.vertices))
                        for e in mesh.entities]
@@ -55,7 +57,7 @@ def base_import_data_into_region(region, inputs, identifier_fcn, parameters_fcn)
             pp.add_points(lines_as_list)
             pp.pare_points()
 
-            createNodes(coordinates, pp.get_pared_points(), node_set=node_set)
+            create_nodes(coordinates, pp.get_pared_points(), node_set=node_set)
 
             zinc_mesh = field_module.findMeshByDimension(1)
             linear_basis = field_module.createElementbasis(1, Elementbasis.FUNCTION_TYPE_LINEAR_LAGRANGE)
