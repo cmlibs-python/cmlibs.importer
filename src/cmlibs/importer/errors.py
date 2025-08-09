@@ -37,3 +37,7 @@ class ImporterImportCellDensityError(ImporterImportError):
 
 class ImporterImportPointCloudError(ImporterImportError):
     pass
+
+
+class ImporterImportXYZError(ImporterImportError):
+    pass
