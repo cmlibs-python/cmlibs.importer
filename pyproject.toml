@@ -15,7 +15,7 @@ authors = [
     { name="Hugh Sorby", email="h.sorby@auckland.ac.nz" },
 ]
 dependencies = [
-    'cmlibs.zinc',
+    'cmlibs.zinc >= 4.2.0',
     'pointpare',
 ]
 description = "Import a variety of formats to CMLibs Zinc."
@@ -33,6 +33,7 @@ Repository = "https://github.com/CMLibs-Python/cmlibs.importer"
 [project.optional-dependencies]
 common = ["trimesh", "Shapely"]
 svg = ["trimesh", "svg.path", "lxml"]
-mbfxml = ["mbfxml2ex"]
+mbfxml = ["mbfxml2ex >= 0.8.4"]
+all = ["mbfxml2ex >= 0.8.4", "svg.path", "lxml", "trimesh", "Shapely"]
 
 [tool.setuptools_scm]
