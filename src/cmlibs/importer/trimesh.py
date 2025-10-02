@@ -63,7 +63,6 @@ def base_import_data_into_region(region, inputs, identifier_fcn, parameters_fcn)
             linear_basis = field_module.createElementbasis(1, Elementbasis.FUNCTION_TYPE_LINEAR_LAGRANGE)
             element_template = zinc_mesh.createElementtemplate()
             element_template.setElementShapeType(Element.SHAPE_TYPE_LINE)
-            element_template.setNumberOfNodes(2)
             eft = zinc_mesh.createElementfieldtemplate(linear_basis)
             element_template.defineField(coordinates, -1, eft)
             p_dict = {}

@@ -80,7 +80,7 @@ class Trimesh(unittest.TestCase):
         with open(output_exf) as f:
             lines = f.readlines()
 
-        self.assertEqual(138502, len(lines))
+        self.assertEqual(81530, len(lines))
         os.remove(output_exf)
 
     def test_parameters_obj(self):
@@ -132,7 +132,7 @@ class Trimesh(unittest.TestCase):
         with open(output_exf) as f:
             lines = f.readlines()
 
-        self.assertEqual(849, len(lines))
+        self.assertEqual(821, len(lines))
         os.remove(output_exf)
 
     def test_parameters_svg(self):

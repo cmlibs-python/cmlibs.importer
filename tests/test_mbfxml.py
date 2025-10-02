@@ -38,7 +38,7 @@ class MBFXML(unittest.TestCase):
         with open(output_exf) as f:
             lines = f.readlines()
 
-        self.assertEqual(230, len(lines))
+        self.assertEqual(260, len(lines))
         os.remove(output_exf)
 
 
