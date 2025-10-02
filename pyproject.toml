@@ -15,6 +15,7 @@ authors = [
     { name="Hugh Sorby", email="h.sorby@auckland.ac.nz" },
 ]
 dependencies = [
+    'cmlibs.utils',
     'cmlibs.zinc >= 4.2.0',
     'pointpare',
 ]
