@@ -1,4 +1,3 @@
-import csv
 import os.path
 import shlex
 
@@ -83,6 +82,8 @@ def parameters(parameter_name=None):
             The group natural number can be defined in the legend section of the file.
             The legend section has only two columns, the first column is the group natural number
             and anything after the group number is the group name.
+            If you have spaces in the group name then wrap the name in quotes, for example:
+            1 "Unlabelled Tissue"
             """,
         "input": {
             "mimetype": "text/plain",

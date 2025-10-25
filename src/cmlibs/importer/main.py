@@ -17,6 +17,7 @@ from cmlibs.importer import ragpdata
 from cmlibs.importer import stl
 from cmlibs.importer import svg
 from cmlibs.importer import xyz
+from cmlibs.importer import xyzvalue
 
 from cmlibs.importer.errors import ImporterImportError
 
@@ -94,6 +95,9 @@ def main():
     xyz_parser = subparsers.add_parser(xyz.identifier())
     xyz_parser.add_argument("xyz_file", help="XYZ file.")
 
+    xyzvalue_parser = subparsers.add_parser(xyzvalue.identifier())
+    xyzvalue_parser.add_argument("xyzvalue_file", help="XYZ value file.")
+
     args = parser.parse_args()
 
     if args.list:
@@ -128,6 +132,8 @@ def main():
             inputs.extend(args.svg_file)
         elif args.importer == xyz.identifier():
             inputs.extend(args.xyz_file)
+        elif args.importer == xyzvalue.identifier():
+            inputs.extend(args.xyzvalue_file)
 
         import_data(args.importer, inputs, args.output)
 

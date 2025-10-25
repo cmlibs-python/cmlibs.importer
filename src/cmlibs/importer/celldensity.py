@@ -35,7 +35,7 @@ def import_data_into_region(region, inputs):
                 else:
                     cell_density_data["cell_types"].append(row.pop(0))
                     cell_density_data["cell_densities"].append([float(r) for r in row])
-        except UnicodeDecodeError:
+        except (UnicodeDecodeError, IndexError):
             raise ImporterImportCellDensityError("Cell density file is not valid.")
 
     if len(cell_density_data["group_names"]) == 0:

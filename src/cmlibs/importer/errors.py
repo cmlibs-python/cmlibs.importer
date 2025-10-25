@@ -41,3 +41,7 @@ class ImporterImportPointCloudError(ImporterImportError):
 
 class ImporterImportXYZError(ImporterImportError):
     pass
+
+
+class ImporterImportXYZValueError(ImporterImportError):
+    pass
